@@ -12,7 +12,7 @@ public class TaskManager {
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, Subtask> subtasks = new HashMap<>();
 
-
+    // Создаём обычную задачу
     public Task addTask(Task task) {
         task.setId(currentId++);
         tasks.put(task.getId(), task);
@@ -39,7 +39,7 @@ public class TaskManager {
         return subtask;
     }
 
-
+    // Получить списки всех задач
     public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
     }
@@ -52,7 +52,7 @@ public class TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
-
+    // Поиск по ID
     public Task getTask(int id) {
         return tasks.get(id);
     }
@@ -65,14 +65,14 @@ public class TaskManager {
         return subtasks.get(id);
     }
 
-
+    // Обновляем задачу, если есть
     public void updateTask(Task task) {
         if (tasks.containsKey(task.getId())) {
             tasks.put(task.getId(), task);
         }
     }
 
-
+    // Обновляем эпик, статус нельзя менять вручную
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
             // статус эпика всегда рассчитываем заново
@@ -82,7 +82,7 @@ public class TaskManager {
         }
     }
 
-
+    // Обновляем подзадачу и обновляем статус эпика
     public void updateSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
@@ -90,7 +90,7 @@ public class TaskManager {
         }
     }
 
-
+    // Удаляем все задачи
     public void clearAllTasks() {
         tasks.clear();
     }
@@ -108,7 +108,7 @@ public class TaskManager {
         }
     }
 
-
+    // Удаляем по ID
     public void deleteTask(int id) {
         tasks.remove(id);
     }
@@ -133,7 +133,7 @@ public class TaskManager {
         }
     }
 
-
+    // Получить все подзадачи у эпика
     public List<Subtask> getSubtasksForEpic(int epicId) {
         List<Subtask> result = new ArrayList<>();
         Epic epic = epics.get(epicId);
@@ -148,7 +148,7 @@ public class TaskManager {
         return result;
     }
 
-
+    // Обновляем статус эпика на основе подзадач
     private void refreshEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) return;
