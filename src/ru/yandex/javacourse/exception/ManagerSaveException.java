@@ -1,4 +1,4 @@
-package ru.yandex.javacourse.manager;
+package ru.yandex.javacourse.exception;
 
 // Добавить своё unchecked исключение для ошибок сохранения
     public class ManagerSaveException extends RuntimeException {

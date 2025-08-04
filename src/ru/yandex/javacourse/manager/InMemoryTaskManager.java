@@ -180,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
         return result;
     }
 
-    private void refreshEpicStatus(int epicId) {
+    protected void refreshEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) return;
 

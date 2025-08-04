@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import ru.yandex.javacourse.exception.ManagerSaveException;
 import ru.yandex.javacourse.tasks.Epic;
 import ru.yandex.javacourse.tasks.Subtask;
 import ru.yandex.javacourse.tasks.Task;
@@ -13,7 +14,7 @@ import ru.yandex.javacourse.tasks.TaskStatus;
 
 public class FileBackendTaskManager extends InMemoryTaskManager{
 
-    private File file;
+    private final File file;
 
     public FileBackendTaskManager(File file) {
         this.file = file;
@@ -163,20 +164,31 @@ public class FileBackendTaskManager extends InMemoryTaskManager{
 
     @Override
     public void updateTask(Task task) {
-        super.updateTask(task);
-        save();
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+        } else {
+            throw new IllegalArgumentException("Задача с ID " + task.getId() + " не найдена.");
+        }
     }
 
     @Override
     public void updateEpic(Epic epic) {
-        super.updateEpic(epic);
-        save();
+        if (epics.containsKey(epic.getId())) {
+            epics.put(epic.getId(), epic);
+            refreshEpicStatus(epic.getId());
+        } else {
+            throw new IllegalArgumentException("Эпик с ID " + epic.getId() + " не найден.");
+        }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        super.updateSubtask(subtask);
-        save();
+        if (subtasks.containsKey(subtask.getId())) {
+            subtasks.put(subtask.getId(), subtask);
+            refreshEpicStatus(subtask.getEpicId());
+        } else {
+            throw new IllegalArgumentException("Подзадача с ID " + subtask.getId() + " не найдена.");
+        }
     }
 
     @Override
