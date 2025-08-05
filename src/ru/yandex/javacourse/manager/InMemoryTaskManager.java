@@ -7,13 +7,13 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private int currentId = 1;
+    protected int currentId = 1;
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
 
-    private final HistoryManager historyManager;
+    protected final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.historyManager = Managers.getDefaultHistory();
@@ -180,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
         return result;
     }
 
-    private void refreshEpicStatus(int epicId) {
+    protected void refreshEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic == null) return;
 
