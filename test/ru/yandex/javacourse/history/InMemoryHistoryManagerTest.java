@@ -37,6 +37,43 @@ public class InMemoryHistoryManagerTest {
         }
         List<Task> history = historyManager.getHistory();
         assertEquals(10, history.size());
-        assertEquals(6, history.get(0).getId()); // первый элемент — 6, потому что 1..5 были удалены
+        assertEquals(6, history.get(0).getId());
+    }
+
+    @Test
+    void removeFromHistoryMiddleStartEnd() {
+        Task t1 = new Task(1, "T1", "D", TaskStatus.NEW);
+        Task t2 = new Task(2, "T2", "D", TaskStatus.NEW);
+        Task t3 = new Task(3, "T3", "D", TaskStatus.NEW);
+
+        historyManager.add(t1);
+        historyManager.add(t2);
+        historyManager.add(t3);
+
+        historyManager.remove(2);
+        List<Task> hist = historyManager.getHistory();
+        assertEquals(2, hist.size());
+        assertEquals(t1, hist.get(0));
+        assertEquals(t3, hist.get(1));
+
+        historyManager.remove(1);
+        hist = historyManager.getHistory();
+        assertEquals(1, hist.size());
+        assertEquals(t3, hist.get(0));
+
+        historyManager.remove(3);
+        hist = historyManager.getHistory();
+        assertTrue(hist.isEmpty());
+    }
+
+    @Test
+    void addDuplicateToHistory() {
+        Task t = new Task(1, "T", "D", TaskStatus.NEW);
+        historyManager.add(t);
+        historyManager.add(t);
+        historyManager.add(t);
+
+        List<Task> hist = historyManager.getHistory();
+        assertEquals(1, hist.size(), "Дубликаты должны удаляться");
     }
 }
