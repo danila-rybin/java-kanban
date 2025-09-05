@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HistoryManager historyManager = new InMemoryHistoryManager();
     protected int currentId = 1;
 
-    // ADD
+
     @Override
     public Task addTask(Task task) {
         task.setId(currentId++);
@@ -45,7 +45,7 @@ public class InMemoryTaskManager implements TaskManager {
         return subtask;
     }
 
-    // GET ALL
+
     @Override
     public List<Task> getAllTasks() {
         return new ArrayList<>(tasks.values());
@@ -61,7 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 
-    // GET BY ID
+
     @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
@@ -83,7 +83,7 @@ public class InMemoryTaskManager implements TaskManager {
         return subtask;
     }
 
-    //  UPDATE
+
     @Override
     public void updateTask(Task task) {
         tasks.put(task.getId(), task);
@@ -102,7 +102,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) refreshEpicTimesAndStatus(epic);
     }
 
-    // DELETE
+
     @Override
     public void deleteTask(int id) {
         tasks.remove(id);
@@ -131,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    //  CLEAR ALL
+
     @Override
     public void clearAllTasks() {
         tasks.clear();
@@ -151,7 +151,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // GET SUBTASKS FOR EPIC
+
     @Override
     public List<Subtask> getSubtasksForEpic(int epicId) {
         Epic epic = epics.get(epicId);
@@ -162,13 +162,13 @@ public class InMemoryTaskManager implements TaskManager {
                 .collect(Collectors.toList());
     }
 
-    // HISTORY
+
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
-    //  EPIC HELPERS
+
     protected void refreshEpicTimesAndStatus(Epic epic) {
         List<Subtask> subtaskList = epic.getSubtaskIds().stream()
                 .map(subtasks::get)
