@@ -26,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task addTask(Task task) {
         task.setId(currentId++);
         tasks.put(task.getId(), task);
-        prioritizedTasks.add(task);  // Добавляем в приоритетный сет
+        prioritizedTasks.add(task);
         return task;
     }
 
@@ -34,7 +34,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic addEpic(Epic epic) {
         epic.setId(currentId++);
         epics.put(epic.getId(), epic);
-        prioritizedTasks.add(epic);  // Добавляем в приоритетный сет
+        prioritizedTasks.add(epic);
         return epic;
     }
 
@@ -42,7 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask addSubtask(Subtask subtask) {
         subtask.setId(currentId++);
         subtasks.put(subtask.getId(), subtask);
-        prioritizedTasks.add(subtask);  // Добавляем в приоритетный сет
+        prioritizedTasks.add(subtask);
 
         Epic epic = epics.get(subtask.getEpicId());
         if (epic != null) {
@@ -90,7 +90,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        // Удаляем старую, если есть, потом добавляем обновленную
         Task oldTask = tasks.get(task.getId());
         if (oldTask != null) {
             prioritizedTasks.remove(oldTask);
