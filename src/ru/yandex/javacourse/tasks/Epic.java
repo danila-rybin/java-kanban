@@ -58,7 +58,7 @@ public class Epic extends Task {
         this.endTime = endTime;
     }
 
-    /** Метод для пересчёта полей на основе подзадач */
+
     public void updateTimeFields(List<Subtask> subtasks) {
         if (subtasks == null || subtasks.isEmpty()) {
             duration = Duration.ZERO;

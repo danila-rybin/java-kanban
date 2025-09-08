@@ -57,7 +57,7 @@ public class FileBackendTaskManagerTest {
 
     @Test
     public void testLoadFromFile() throws Exception {
-        // Создаем CSV с задачей
+
         String content = """
                 id,type,name,status,description,epic,duration,startTime
                 1,TASK,Loaded Task,NEW,Loaded description,,PT1H,2025-09-04T22:00

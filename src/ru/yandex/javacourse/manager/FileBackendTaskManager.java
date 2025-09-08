@@ -16,11 +16,16 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
     private final File file;
     private final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(
+            Comparator.comparing(Task::getStartTime, Comparator.nullsLast(Comparator.naturalOrder()))
+                    .thenComparing(Task::getId)
+    );
+
     public FileBackendTaskManager(File file) {
         this.file = file;
     }
 
-    // Сохранение данных
+
     protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic,duration,startTime");
@@ -97,6 +102,7 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
                     } else {
                         manager.tasks.put(task.getId(), task);
                     }
+                    manager.prioritizedTasks.add(task);
                 } else {
                     for (int id : historyFromString(line)) {
                         Task task = manager.tasks.get(id);
@@ -123,7 +129,7 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
         return history.stream().map(Task::getId).map(String::valueOf).collect(Collectors.joining(","));
     }
 
-    //Проверка пересечения времени
+
     private void checkTimeIntersection(Task newTask) {
         if (newTask.getStartTime() == null) return;
 
@@ -189,19 +195,17 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
         else epic.setStatus(TaskStatus.IN_PROGRESS);
     }
 
+
     public List<Task> getPrioritizedTasks() {
-        List<Task> all = new ArrayList<>();
-        all.addAll(tasks.values());
-        all.addAll(subtasks.values());
-        all.sort(Comparator.comparing(Task::getStartTime, Comparator.nullsLast(Comparator.naturalOrder())));
-        return all;
+        return new ArrayList<>(prioritizedTasks);
     }
 
-    // Переопределённые методы для сохранения
+
     @Override
     public Task addTask(Task task) {
         checkTimeIntersection(task);
         Task t = super.addTask(task);
+        prioritizedTasks.add(t);
         save();
         return t;
     }
@@ -209,6 +213,7 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
     @Override
     public Epic addEpic(Epic epic) {
         Epic e = super.addEpic(epic);
+        prioritizedTasks.add(e);
         save();
         return e;
     }
@@ -218,64 +223,77 @@ public class FileBackendTaskManager extends InMemoryTaskManager {
         checkTimeIntersection(subtask);
         Subtask s = super.addSubtask(subtask);
         refreshEpicTimesAndStatus(epics.get(subtask.getEpicId()));
+        prioritizedTasks.add(s);
         save();
         return s;
     }
 
     @Override
     public void updateTask(Task task) {
+        prioritizedTasks.remove(tasks.get(task.getId()));
         checkTimeIntersection(task);
         super.updateTask(task);
+        prioritizedTasks.add(task);
         save();
     }
 
     @Override
     public void updateEpic(Epic epic) {
+        prioritizedTasks.remove(epics.get(epic.getId()));
         super.updateEpic(epic);
         refreshEpicTimesAndStatus(epic);
+        prioritizedTasks.add(epic);
         save();
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
+        prioritizedTasks.remove(subtasks.get(subtask.getId()));
         checkTimeIntersection(subtask);
         super.updateSubtask(subtask);
         refreshEpicTimesAndStatus(epics.get(subtask.getEpicId()));
+        prioritizedTasks.add(subtask);
         save();
     }
 
     @Override
     public void deleteTask(int id) {
+        prioritizedTasks.remove(tasks.get(id));
         super.deleteTask(id);
         save();
     }
 
     @Override
     public void deleteEpic(int id) {
+        prioritizedTasks.remove(epics.get(id));
         super.deleteEpic(id);
         save();
     }
 
     @Override
     public void deleteSubtask(int id) {
+        prioritizedTasks.remove(subtasks.get(id));
         super.deleteSubtask(id);
         save();
     }
 
     @Override
     public void clearAllTasks() {
+        prioritizedTasks.removeAll(tasks.values());
         super.clearAllTasks();
         save();
     }
 
     @Override
     public void clearAllEpics() {
+        prioritizedTasks.removeAll(epics.values());
         super.clearAllEpics();
         save();
     }
 
     @Override
     public void clearAllSubtasks() {
+        prioritizedTasks.removeAll(subtasks.values());
         super.clearAllSubtasks();
         save();
     }
