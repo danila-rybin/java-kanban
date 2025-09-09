@@ -4,7 +4,6 @@ import com.sun.net.httpserver.HttpServer;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.manager.TaskManager;
 
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -21,8 +20,8 @@ public class HttpTaskServer {
         httpServer.createContext("/tasks/subtask/", new SubtaskHandler(taskManager));
         httpServer.createContext("/tasks/subtask/epic/", new SubtaskByEpicHandler(taskManager));
         httpServer.createContext("/tasks/history/", new HistoryHandler(taskManager));
-        httpServer.createContext("/tasks/", new TasksHandler(taskManager));
-        httpServer.createContext("/tasks/prioritized", new PrioritizedHandler(taskManager));
+        httpServer.createContext("/tasks", new TasksHandler(taskManager));
+        httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager));
     }
 
     public void start() {

@@ -1,9 +1,9 @@
 package ru.yandex.javacourse.http;
 
 import com.sun.net.httpserver.HttpExchange;
+import http.HttpMethod;
 import ru.yandex.javacourse.manager.TaskManager;
 import ru.yandex.javacourse.tasks.Task;
-import http.HttpMethod;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,6 @@ public class PrioritizedHandler extends BaseHttpHandler {
         try {
             String path = exchange.getRequestURI().getPath();
             HttpMethod httpMethod;
-
             try {
                 httpMethod = HttpMethod.valueOf(exchange.getRequestMethod());
             } catch (IllegalArgumentException e) {
@@ -29,7 +28,7 @@ public class PrioritizedHandler extends BaseHttpHandler {
             }
 
             if (httpMethod == HttpMethod.GET) {
-                if (Pattern.matches("^/tasks/prioritized$", path)) {
+                if (Pattern.matches("^/prioritized$", path)) {
                     handleGetPrioritizedTasks(exchange);
                 } else {
                     sendNotFound(exchange);

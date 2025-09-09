@@ -20,7 +20,6 @@ public class TasksHandler extends BaseHttpHandler {
         try {
             String path = exchange.getRequestURI().getPath();
             HttpMethod httpMethod;
-
             try {
                 httpMethod = HttpMethod.valueOf(exchange.getRequestMethod());
             } catch (IllegalArgumentException e) {
@@ -29,8 +28,8 @@ public class TasksHandler extends BaseHttpHandler {
             }
 
             if (httpMethod == HttpMethod.GET) {
-                if (Pattern.matches("^/tasks/$", path)) {
-                    handleGetPrioritizedTasks(exchange);
+                if (Pattern.matches("^/tasks$", path)) {
+                    handleGetTasks(exchange);
                 } else {
                     sendNotFound(exchange);
                 }
@@ -42,8 +41,8 @@ public class TasksHandler extends BaseHttpHandler {
         }
     }
 
-    private void handleGetPrioritizedTasks(HttpExchange exchange) throws IOException {
-        List<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
-        sendSuccess(exchange, gson.toJson(prioritizedTasks));
+    private void handleGetTasks(HttpExchange exchange) throws IOException {
+        List<Task> tasks = taskManager.getAllTasks();
+        sendSuccess(exchange, gson.toJson(tasks));
     }
 }
