@@ -56,22 +56,22 @@ public class InMemoryTaskManagerTest {
         manager.addSubtask(subtask1);
         manager.addSubtask(subtask2);
 
-        // все NEW
+
         assertEquals(TaskStatus.NEW, manager.getEpic(epic.getId()).getStatus());
 
         subtask1.setStatus(TaskStatus.DONE);
         manager.updateSubtask(subtask1);
 
-        // NEW + DONE = IN_PROGRESS
+
         assertEquals(TaskStatus.IN_PROGRESS, manager.getEpic(epic.getId()).getStatus());
 
         subtask2.setStatus(TaskStatus.DONE);
         manager.updateSubtask(subtask2);
 
-        // все DONE
+
         assertEquals(TaskStatus.DONE, manager.getEpic(epic.getId()).getStatus());
 
-        // один IN_PROGRESS
+
         subtask1.setStatus(TaskStatus.IN_PROGRESS);
         manager.updateSubtask(subtask1);
         assertEquals(TaskStatus.IN_PROGRESS, manager.getEpic(epic.getId()).getStatus());

@@ -59,4 +59,24 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
         return history;
     }
+
+    @Override
+    public void clear() {
+        head = null;
+        tail = null;
+        nodeMap.clear();
+    }
+
+
+    private static class Node<T> {
+        T data;
+        Node<T> prev;
+        Node<T> next;
+
+        Node(Node<T> prev, T data, Node<T> next) {
+            this.prev = prev;
+            this.data = data;
+            this.next = next;
+        }
+    }
 }
